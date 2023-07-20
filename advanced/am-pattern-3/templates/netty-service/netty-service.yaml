@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: netty-service
+  namespace: {{ .Release.Namespace }}
+spec:
+  selector:
+    app: netty-app
+  ports:
+    - protocol: TCP
+      port: 80  # The external port through which your service will be accessed
+      targetPort: 8688  # The port your Netty application listens on inside the pod
+  type: LoadBalancer  # Use "LoadBalancer" if your Kubernetes cluster supports it

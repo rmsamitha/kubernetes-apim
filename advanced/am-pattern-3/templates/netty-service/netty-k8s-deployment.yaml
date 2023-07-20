@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: netty-service-deployment
+  labels:
+    app: netty-app
+spec:
+  replicas: 1  # Number of desired replicas (instances) of the application
+  selector:
+    matchLabels:
+      app: netty-app  # Label selector used to match the pods created by this Deployment
+  template:
+    metadata:
+      labels:
+        app: netty-app
+    spec:
+      containers:
+        - name: netty-service-container
+          image: rmsamitha/netty-echo:1.0.0  # Replace with the actual Docker image URL
+          ports:
+            - containerPort: 8688  # Port on which your Java application listens
+          # Add any additional environment variables, volume mounts, etc. as required

@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client-jmeter-deployment
+  namespace: wso2
+spec:
+  replicas: 6
+  selector:
+    matchLabels:
+      app: client-jmeter
+  template:
+    metadata:
+      labels:
+        app: client-jmeter
+    spec:
+      containers:
+        - name: client-jmeter
+          image: ubuntu:latest
+          resources:
+            requests:
+              memory: "8Gi"
+              cpu: "4"
+            limits:
+              memory: "8Gi"
+              cpu: "4"
+          command: ["/bin/bash", "-c"]
+          args: ["apt update && echo 'start to install java-8' && apt install -y openjdk-8-jdk && echo 'Start to run Jmeter Scripts' && nohup sh /home/apache-jmeter-4.0/bin/jmeter -n -t /home/jmeter-scripts/HTTPSGetRequest.jmx -l /home/jmeter-results/HTTPSGetRequest-results-$HOSTNAME.jtl >> /home/jmeter-results/nohupOutput/HTTPSGetRequest-results-$HOSTNAME-nohupOut.out"]
+          volumeMounts:
+            - name: clent-artifats-storage-volume
+              mountPath: "/home"
+            - name: clent-host-configuration
+              mountPath: "/etc/hosts"
+              subPath: hosts
+            - name: jmeter-scripts-files-volume
+              mountPath: "/home/jmeter-scripts"
+      volumes:
+        - name: clent-artifats-storage-volume
+          persistentVolumeClaim:
+            claimName: clent-artifats-storage-volume-claim
+        - name: clent-host-configuration
+          configMap:
+            name: clent-host-configuration
+          - name: jmeter-scripts-files-volume
+          configMap:
+            name: jmeter-scripts-files
