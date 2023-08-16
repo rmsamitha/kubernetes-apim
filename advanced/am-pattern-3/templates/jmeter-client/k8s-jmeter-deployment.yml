@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jmeter-deployment
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: jmeter-test
+  template:
+    metadata:
+      labels:
+        app: jmeter-test
+    spec:
+      containers:
+        - name: jmeter
+          image: rmsamitha/redis-test-jmeter:1.0.6
+          imagePullPolicy: Always
+          #command: ["jmeter", "-n", "-t", "/jmeter/test.jmx", "-l", "/jmeter/results.jtl"]
+          volumeMounts:
+            - name: test-plan-volume
+              mountPath: /jmeter
+          ports:
+            - containerPort: 8243
+              protocol: TCP
+          # Add additional environment variables or resource limits if required
+          resources:
+            requests:
+              memory: 4Gi
+              cpu: 2000m
+            limits:
+              memory: 5Gi
+              cpu: 4000m
+
+#            requests:
+#              memory: {{ .Values.wso2.deployment.jmeter.resources.requests.memory }}
+#              cpu: {{ .Values.wso2.deployment.jmeter.resources.requests.cpu }}
+#              limits:
+#                memory: {{ .Values.wso2.deployment.jmeter.resources.limits.memory }}
+#                cpu: {{ .Values.wso2.deployment.jmeter.resources.limits.cpu }}
+      #serviceAccountName: {{ .Values.kubernetes.serviceAccount }}
+      volumes:
+        - name: test-plan-volume
+          # Use a ConfigMap if you have one, otherwise, use an emptyDir for simplicity
+          emptyDir: {}

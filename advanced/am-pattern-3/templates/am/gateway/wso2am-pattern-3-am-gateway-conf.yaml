@@ -150,14 +150,15 @@ data:
     #user = "<Redis-username>"
     password = "k8CD7oqWSSKggPTdb8BrZWc45Brwf5bT6AzCaGMXkSU="
     gateway_id = "$env{NODE_IP}"
-    key_lock_retrieval_timeout = 600
+    key_lock_retrieval_timeout = 50
     is_production_time_unit_in_sec = true
     
     [throttle_properties]
     'throttling.distributed.counter.type' = "redis"
-    'throttling.replication.frequency' = 20000
-    'throttlingWindowReplicator.replication.frequency' = 20000
+    'throttling.replication.frequency' = 20
+    'throttlingWindowReplicator.replication.frequency' = 20
     'throttling.sync-async_hybrid_mode.enable' = true
+    'throttling.hybrid_throttle_processor_window.type' =  "start_time_based" #   "clock_time_based" or "start_time_based"
 
   log4j2.properties: |-
     # list of all appenders
@@ -171,7 +172,7 @@ data:
     appender.CARBON_CONSOLE.layout.type = PatternLayout
     appender.CARBON_CONSOLE.layout.pattern = [%d{DEFAULT}] %5p - %c{1} %m%n
     appender.CARBON_CONSOLE.filter.threshold.type = ThresholdFilter
-    appender.CARBON_CONSOLE.filter.threshold.level = DEBUG
+    appender.CARBON_CONSOLE.filter.threshold.level = TRACE
 
     # CARBON_LOGFILE is set to be a DailyRollingFileAppender using a PatternLayout.
     appender.CARBON_LOGFILE.type = RollingFile
@@ -359,20 +360,20 @@ data:
     logger.RedisBaseDistributedCountManager.level = INFO
 
     logger.HybridThrottleProcessor.name = org.wso2.carbon.apimgt.gateway.HybridThrottleProcessor
-    logger.HybridThrottleProcessor.level = DEBUG
+    logger.HybridThrottleProcessor.level = INFO
 
     logger.SharedParamManager.name = org.apache.synapse.commons.throttle.core.SharedParamManager
     logger.SharedParamManager.level = INFO
 
 
     logger.CallerContext.name = org.apache.synapse.commons.throttle.core.CallerContext
-    logger.CallerContext.level = DEBUG
+    logger.CallerContext.level = INFO
 
     logger.ThrottleReplicator.name = org.apache.synapse.commons.throttle.core.ThrottleReplicator
-    logger.ThrottleReplicator.level = DEBUG
+    logger.ThrottleReplicator.level = INFO
 
     logger.ThrottleWindowReplicator.name = org.apache.synapse.commons.throttle.core.ThrottleWindowReplicator
-    logger.ThrottleWindowReplicator.level = DEBUG
+    logger.ThrottleWindowReplicator.level = INFO
 
     logger.AUDIT_LOG.name = AUDIT_LOG
     logger.AUDIT_LOG.level = INFO

@@ -59,7 +59,7 @@ wso2:
       # If a custom image must be used, uncomment 'dockerRegistry' and provide its value
       dockerRegistry: "rmsamitha"
       imageName: "wso2am-test"
-      imageTag: "4.2.0"
+      imageTag: "4.2.0.10"
 #      image: rmsamitha/wso2am-test:4.2.0
       # Refer to the Kubernetes documentation on updating images (https://kubernetes.io/docs/concepts/containers/images/#updating-images)
       imagePullPolicy: IfNotPresent
@@ -68,11 +68,11 @@ wso2:
         # These are the resource recommendations for running WSO2 API Management product profiles with profile optimization
         # Resource configurations defined here are applicable for all API Manager product profiles of this deployment
         requests:
-          memory: "1Gi"
-          cpu: "1000m"
-        limits:
-          memory: "2Gi"
+          memory: "4Gi"
           cpu: "2000m"
+        limits:
+          memory: "5Gi"
+          cpu: "4000m"
         # JVM settings
         # These are the resource allocation configurations associated with the JVM
         # Refer to the official documentation for advanced details (https://apim.docs.wso2.com/en/latest/install-and-setup/install/installation-prerequisites/)
@@ -81,9 +81,9 @@ wso2:
           heap:
             memory:
               # Initial and minimum Heap size
-              xms: "512m"
+              xms: "2048m"
               # Maximum Heap size
-              xmx: "512m"
+              xmx: "2048m"
 
       # Kubernetes Probes
       # Startup probe executed prior to Liveness Probe taking over
@@ -147,7 +147,7 @@ wso2:
             nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
 
         # Number of deployment replicas
-        replicas: 3
+        replicas: 10
 
         # Kubernetes RollingUpdate strategy configurations
         strategy:
@@ -240,6 +240,16 @@ wso2:
         # config:
         #   deployment.toml: |-
         #     # deployment configurations for the Control Plane profile of WSO2 API Manager v4.0.0 (<WSO2AM>/repository/conf/deployment.toml)
+    jmeter:
+      resources:
+        # These are the resource recommendations for running WSO2 API Management product profiles with profile optimization
+        # Resource configurations defined here are applicable for all API Manager product profiles of this deployment
+        requests:
+          memory: "4Gi"
+          cpu: "2000m"
+        limits:
+          memory: "5Gi"
+          cpu: "4000m"
 
 kubernetes:
   # Name of Kubernetes service account
